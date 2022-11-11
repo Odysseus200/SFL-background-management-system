@@ -1,0 +1,9 @@
+$color:pink;
+body{
+  background-color: $color;
+//   禁用文字选中
+  user-select: none;
+}
+img{
+    -webkit-user-drag: none;
+}
