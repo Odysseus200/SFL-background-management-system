@@ -1,77 +1,64 @@
-import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
-  } from '@ant-design/icons';
-  import type { MenuProps } from 'antd';
-  import { Breadcrumb, Layout, Menu } from 'antd';
-  import React, { useState } from 'react';
-  import {useNavigate,Outlet} from 'react-router-dom'
 
-  const { Header, Content, Footer, Sider } = Layout;
+import { Breadcrumb, Layout, Button, message, Modal} from 'antd';
+import React, { useState} from 'react';
+import { Outlet,useNavigate } from "react-router-dom"
+import MainMenu from "@/components/MainMenu"
+const { Header, Content, Footer, Sider } = Layout;
+const View: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  type MenuItem = Required<MenuProps>['items'][number];
-
-  function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[],
-  ): MenuItem {
-    return {
-      key,
-      icon,
-      children,
-      label,
-    } as MenuItem;
-  }
-  const items: MenuItem[] = [
-    getItem('栏目1', 'page1 ', <PieChartOutlined />),
-    getItem('栏目2', 'page2', <DesktopOutlined />),
-    getItem('User', 'sub1', <UserOutlined />, [
-      getItem('Tom', '3'),
-      getItem('Bill', '4'),
-      getItem('Alex', '5'),
-    ]),
-    getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-    getItem('Files', '9', <FileOutlined />),
-  ];
-  const View: React.FC = () => {
-    const [collapsed, setCollapsed] = useState(false);
-    const navigateTo =useNavigate();
-    //侧边菜单点击事件
-    const menuClick =(e:{key:string})=>{
-      console.log(e.key)
-      // 编程式跳转
-      navigateTo(e.key)
-    }
-    return (
-      <Layout style={{ minHeight: '100vh' }}>
-        {/* 左侧边栏 */}
-        <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
-          <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={menuClick} />
-        </Sider>
-        {/* 右边header */}
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ paddingLeft:'20px' }} >
-            {/* 面包屑 */}
-          <Breadcrumb style={{lineHeight:'64px', margin: '20px 20px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-           </Header>
-        {/* 右边主内容 */}
-          <Content style={{ margin: '20px 20px 0'}}  className="site-layout-background">
-          {/* 主视窗 用子组件在这里显示 所以用Outlet*/}
-          <Outlet/>
-          </Content>
-          {/* 底部 */}
-          <Footer style={{ textAlign: 'center',lineHeight:'50px',padding:'0'}}>SFL(安全/快速/轻量)后台管理系统 ©2022 Created by Odysseus200</Footer>
-        </Layout>
-      </Layout>
-    );
+  const showModal = () => {
+    setIsModalOpen(true);
   };
-  export default View;
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const [collapsed, setCollapsed] = useState(false);
+
+  const naviToLog = useNavigate()
+  const LogOut = () => {
+    localStorage.setItem("SFL-management-token","")
+    naviToLog("/login")
+    message.warn("已登出")
+  
+  };
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      {/* 左边侧边栏 */}
+      <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
+        <div className="logo"></div>
+        <MainMenu></MainMenu>
+        <Button style={{ bottom:'52px',position:'absolute' }} type="primary" danger block onClick={LogOut}>退出登录</Button>
+      </Sider>
+      {/* 右边内容 */}
+      <Layout className="site-layout">
+        {/* 右边头部 */}
+        <Header className="site-layout-background" style={{ paddingLeft: '16px' }} >
+          {/* 面包屑 */}
+          <Breadcrumb style={{ lineHeight:'64px' }}>
+              <Breadcrumb.Item>园区大数据看板</Breadcrumb.Item>
+              <Breadcrumb.Item>汇总看板</Breadcrumb.Item>
+            </Breadcrumb>
+        </Header>
+        {/* 右边内容部分-白色底盒子 */}
+        <Content style={{ margin: '16px 16px 0' }} className="site-layout-background">
+            {/* 窗口部分 */}
+            <Outlet />
+        </Content>
+        {/* 右边底部 */}
+        <Footer style={{ textAlign: 'center', padding:0, lineHeight:"48px" }}>SFL&nbsp;·&nbsp;©2022 Created by Odysseus200</Footer>
+      </Layout>
+    </Layout>
+  );
+};
+
+export default View;
+
+function token(arg0: string, token: any) {
+  throw new Error('Function not implemented.');
+}

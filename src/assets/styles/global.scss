@@ -1,14 +1,16 @@
-$color:pink;
+$color:#fcf;
 body{
   background-color: $color;
-//   禁用文字选中
+  // 禁用文字选中
   user-select: none;
 }
 img{
-    -webkit-user-drag: none;
+  // 禁止拖动图片
+  -webkit-user-drag: none;
 }
 
-// 主页样式
+
+// 首页的布局样式
 .logo {
   height: 32px;
   margin: 16px;
@@ -16,5 +18,5 @@ img{
 }
 
 .site-layout .site-layout-background {
-  background: #fff;
+  background: #ccc;
 }
